@@ -73,19 +73,23 @@ export function Board({ rows, cols }: BoardProps) {
   };
 
   return (
-    <STWrapper columns={cols}>
-      {columns.map(({ id, slots }) => (
-        <Column
-          key={uuid()}
-          handleFillColumn={handleFillColumn}
-          empty={true}
-          length={rows}
-          id={id}
-          slots={slots}
-        />
-      ))}
+    <>
+      <STWrapper columns={cols} rows={rows}>
+        {columns.map(({ id, slots }) => (
+          <Column
+            key={uuid()}
+            handleFillColumn={handleFillColumn}
+            empty={true}
+            length={rows}
+            id={id}
+            slots={slots}
+          />
+        ))}
+      </STWrapper>
 
-      <h2>WINNER: {winnerPlayer}</h2>
-    </STWrapper>
+      <h2 style={{ fontSize: "2rem" }}>
+        WINNER: <span style={{ color: winnerPlayer }}>{winnerPlayer}</span>
+      </h2>
+    </>
   );
 }
