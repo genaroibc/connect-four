@@ -2,35 +2,14 @@ import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { ColumnItem } from "../../controllers/ColumnItem";
 import { SlotItem } from "../../controllers/SlotItem";
+import { getColumnItems } from "../../helpers/getColumnItems";
 import { Column } from "../Column/Column";
 import { STWrapper } from "./STBoard";
 import { BoardProps, BoardState } from "./types";
 
-const COL_A_ID = uuid();
-const COL_B_ID = uuid();
-const COL_C_ID = uuid();
-
-const SLOT_A_0 = new SlotItem({ columnId: COL_A_ID, filled: false });
-const SLOT_A_1 = new SlotItem({ columnId: COL_A_ID, filled: false });
-const SLOT_A_2 = new SlotItem({ columnId: COL_A_ID, filled: false });
-
-const SLOT_B_0 = new SlotItem({ columnId: COL_B_ID, filled: false });
-const SLOT_B_1 = new SlotItem({ columnId: COL_B_ID, filled: false });
-const SLOT_B_2 = new SlotItem({ columnId: COL_B_ID, filled: false });
-
-const SLOT_C_0 = new SlotItem({ columnId: COL_C_ID, filled: false });
-const SLOT_C_1 = new SlotItem({ columnId: COL_C_ID, filled: false });
-const SLOT_C_2 = new SlotItem({ columnId: COL_C_ID, filled: false });
-
-const COLUMN_A = new ColumnItem({ slots: [SLOT_A_0, SLOT_A_1, SLOT_A_2] });
-const COLUMN_B = new ColumnItem({ slots: [SLOT_B_0, SLOT_B_1, SLOT_B_2] });
-const COLUMN_C = new ColumnItem({ slots: [SLOT_C_0, SLOT_C_1, SLOT_C_2] });
-
-const INITIAL_COLUMNS_STATE = [COLUMN_A, COLUMN_B, COLUMN_C];
-
 export function Board({ rows, cols }: BoardProps) {
   const [columns, setColumns] = useState<BoardState["columns"]>(
-    INITIAL_COLUMNS_STATE
+    getColumnItems({ cols, rows })
   );
 
   const [winnerPlayer, setWinnerPlayer] =
@@ -45,7 +24,7 @@ export function Board({ rows, cols }: BoardProps) {
     } else setPlayerTurn("blue");
   };
 
-  const handleAddChip = (column_id: string) => {
+  const handleFillColumn = (column_id: string) => {
     const updatedColumns = columns.map(col => {
       if (col.id === column_id) {
         col.fill(playerTurn);
@@ -98,7 +77,7 @@ export function Board({ rows, cols }: BoardProps) {
       {columns.map(({ id, slots }) => (
         <Column
           key={uuid()}
-          handleAddChip={handleAddChip}
+          handleFillColumn={handleFillColumn}
           empty={true}
           length={rows}
           id={id}
@@ -106,7 +85,7 @@ export function Board({ rows, cols }: BoardProps) {
         />
       ))}
 
-      <h2>winner: {winnerPlayer}</h2>
+      <h2>WINNER: {winnerPlayer}</h2>
     </STWrapper>
   );
 }
